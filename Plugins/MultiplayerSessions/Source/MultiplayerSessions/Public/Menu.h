@@ -31,6 +31,7 @@ protected:
 
 
 	/* P20 我们子系统的回调函数（Callbacks to Our Subsystem）*/
+	UFUNCTION()
 	void OnCreateSession(bool bWasSuccessful);
 
 
@@ -54,13 +55,14 @@ private:
 	UFUNCTION()
 	void JoinButtonClicked();			// 回调函数：响应鼠标单击 JoinButton 事件
 
-
 	void MenuTearDown();				// 撤销先前设置的输入模式
 
 
 	class UMultiplayerSessionsSubsystem* MultiplayerSessionsSubsystem;	// 处理所有在线会话功能的子系统
 
-	int32 NumPublicConnections;
-	FString MatchType{ TEXT("FreeForAll") };
+	
+	int32 NumPublicConnections{ 4 };			// 公共连接数
+	FString MatchType = { TEXT("FreeForAll") };	// 匹配类型
+	
 
 };

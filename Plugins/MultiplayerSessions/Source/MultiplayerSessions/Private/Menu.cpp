@@ -1,9 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Menu.h"
-
-
 
 
 
@@ -54,8 +51,6 @@ void UMenu::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch )
 		MultiplayerSessionsSubsystem->SubsystemOnCreateSessionCompleteDelegate.AddDynamic(this, &ThisClass::OnCreateSession);
 	}
 
-
-
 }
 
 bool UMenu::Initialize()
@@ -72,9 +67,7 @@ bool UMenu::Initialize()
 	if (JoinButton) {
 		JoinButton->OnClicked.AddDynamic(this, &ThisClass::JoinButtonClicked);	// 绑定回调函数 JoinButtonClicked()
 	}
-
 	return true;
-
 
 }
 
@@ -129,15 +122,14 @@ void UMenu::HostButtonClicked()
 		MultiplayerSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);	// 创建游戏会话
 
 
-
-		if (GEngine) {
-			GEngine->AddOnScreenDebugMessage(	// 添加调试信息到屏幕上
-				-1,				// 使用 -1 不会覆盖前面的调试信息
-				15.f,			// 调试信息的显示时间
-				FColor::Yellow,	// 字体颜色：黄色
-				FString::Printf(TEXT("MultiplayerSessionsSubsystem Yes!"))	// 打印会话创建成功消息
-			);
-		}
+		//if (GEngine) {
+		//	GEngine->AddOnScreenDebugMessage(	// 添加调试信息到屏幕上
+		//		-1,				// 使用 -1 不会覆盖前面的调试信息
+		//		15.f,			// 调试信息的显示时间
+		//		FColor::Yellow,	// 字体颜色：黄色
+		//		FString::Printf(TEXT("Host Button Clicked"))	// 打印会话创建成功消息
+		//	);
+		//}
 
 
 	}
@@ -155,7 +147,7 @@ void UMenu::JoinButtonClicked()
 			-1,				// 使用 -1 不会覆盖前面的调试信息
 			15.f,			// 调试信息的显示时间
 			FColor::Yellow,	// 字体颜色：黄色
-			FString::Printf(TEXT("Join Button Clicked!"))	// 打印点击事件消息
+			FString::Printf(TEXT("Join Button Clicked1!"))	// 打印点击事件消息
 		);
 	}
 

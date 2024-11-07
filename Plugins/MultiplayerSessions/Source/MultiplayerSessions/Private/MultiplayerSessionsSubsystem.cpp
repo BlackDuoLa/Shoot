@@ -21,7 +21,6 @@ UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem():
 
 	}
 
-
 }
 
 void UMultiplayerSessionsSubsystem::CreateSession(int32 NumpublicConnections, FString MatchType)
@@ -69,28 +68,12 @@ void UMultiplayerSessionsSubsystem::CreateSession(int32 NumpublicConnections, FS
 	{
 		// 如果会话创建失败，将委托移出委托列表
 		SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
-
-
 		//播放我们自己的自定义委托
 		// 广播会话创建失败消息到自定义的子系统委托
 		SubsystemOnCreateSessionCompleteDelegate.Broadcast(false);
 
 
-		if (GEngine) {
-			GEngine->AddOnScreenDebugMessage(	// 添加调试信息到屏幕上
-				-1,				// 使用 -1 不会覆盖前面的调试信息
-				15.f,			// 调试信息的显示时间
-				FColor::Yellow,	// 字体颜色：黄色
-				FString::Printf(TEXT("Failed to create session233!"))	// 打印会话创建成功消息
-			);
-		}
-
-
 	}
-
-
-
-
 
 }
 
@@ -113,7 +96,8 @@ void UMultiplayerSessionsSubsystem::StartSession()
 void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
 {
 	// 会话创建成功，将委托移出委托列表
-	if (SessionInterface) {
+	if (SessionInterface) 
+	{
 		SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
 	}
 
