@@ -14,6 +14,20 @@
 // 使用创建动态多播委托的宏来声明将与菜单类上的回调函数绑定的自定义委托
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSubsystemOnCreateSessionCompleteDelegate, bool, bWasSuccessful);
 
+/* P21 更多的子系统委托（More Subsystem Delegates）*/
+DECLARE_MULTICAST_DELEGATE_TwoParams(FSubsystemOnFindSessionsCompleteDelegate, const TArray<FOnlineSessionSearchResult>& SearchResults, bool bWasSuccessful);
+// FOnlineSessionSearchResult 不是 UCLASS 或 USTRUCT，不能在蓝图中实现回调，因此这里使用静态多播委托
+// 如果想要实现整个菜单类和蓝图，并从蓝图中进行回调，需要使用事件调度器，
+// 创建一个 UCLASS 或 USTRUCT，其中包含有关搜索结果的代码，然后使用动态多播委托传递信息
+// 但我们正在使用 C++ 而非蓝图实现菜单类，为了让工作不会过于复杂，我们只使用静态多播委托而非动态。
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FSubsystemOnJoinSessionCompleteDelegate, EOnJoinSessionCompleteResult::Type Result);
+// EOnJoinSessionCompleteResult 也是不是 UCLASS 或 USTRUCT，不能在蓝图中实现回调，因此这里也要使用静态多播委托
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSubsystemOnDestroySessionCompleteDelegate, bool, bWasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSubsystemOnStartSessionCompleteDelegate, bool, bWasSuccessful);
+/* P21 更多的子系统委托（More Subsystem Delegates）*/
+
 
 
 
@@ -50,6 +64,15 @@ public:
 	FSubsystemOnCreateSessionCompleteDelegate SubsystemOnCreateSessionCompleteDelegate;
 
 
+
+	/* P21 更多的子系统委托（More Subsystem Delegates）*/
+	FSubsystemOnFindSessionsCompleteDelegate SubsystemOnFindSessionsCompleteDelegate;
+	FSubsystemOnJoinSessionCompleteDelegate SubsystemOnJoinSessionCompleteDelegate;
+	FSubsystemOnDestroySessionCompleteDelegate SubsystemOnDestroySessionCompleteDelegate;
+	FSubsystemOnStartSessionCompleteDelegate SubsystemOnStartSessionCompleteDelegate;
+	/* P21 更多的子系统委托（More Subsystem Delegates）*/
+
+
 protected:
 
 	/* P16 会话接口委托（Session Interface Delegates）*/
@@ -70,6 +93,8 @@ private:
 	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;	// 上次创建的会话的设置
 	/* P19（实现子系统函数）创建会话（Create Session）*/
 
+	TSharedPtr< FOnlineSessionSearch>LastSessionSearch;
+
 	
 	
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;		// 会话创建完成委托
@@ -88,5 +113,10 @@ private:
 	FDelegateHandle StartSessionCompleteDelegateHandle;					// 会话开始完成委托句柄
 	/* P16 会话接口委托（Session Interface Delegates）*/
 
+
+	bool bCreateSessionOnDestroy{ false };		// 上次调用 CreateSession() 时先前会话是否存在且需要被销毁
+	int32 LastNumPublicConnections;				// 上次会话的公共连接数
+	FString LastMatchType;						// 上次会话的匹配类型
+	
 
 };
