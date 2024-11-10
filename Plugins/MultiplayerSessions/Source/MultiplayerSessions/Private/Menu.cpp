@@ -106,7 +106,7 @@ void UMenu::OnCreateSession(bool bWasSuccessful)
 		{
 
 			// 如果会话创建失败，则重新启用 HostButton 按钮
-			/*HostButton->SetIsEnabled(true);*/
+			HostButton->SetIsEnabled(true);
 
 		}
 	}
@@ -129,11 +129,11 @@ void UMenu::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SearchResul
 		}
 	}
 	// 如果搜索会话失败或者搜索结果为 0
-	//if (!bWasSuccessful || SearchResults.Num() == 0)
-	//{
-	//	// 重新启用 JoinButton 按钮
-	//	JoinButton->SetIsEnabled(true);
-	//}
+	if (!bWasSuccessful || SearchResults.Num() == 0)
+	{
+		// 重新启用 JoinButton 按钮
+		JoinButton->SetIsEnabled(true);
+	}
 
 }
 
@@ -158,11 +158,11 @@ void UMenu::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
 
 	
 	// 如果搜索会话成功但加入会话失败
-	//if (Result != EOnJoinSessionCompleteResult::Success)
-	//{
-	//	// 重新启用 JoinButton 按钮
-	//	JoinButton->SetIsEnabled(true);
-	//}
+	if (Result != EOnJoinSessionCompleteResult::Success)
+	{
+		// 重新启用 JoinButton 按钮
+		JoinButton->SetIsEnabled(true);
+	}
 
 }
 
@@ -178,7 +178,7 @@ void UMenu::OnStartSession(bool bWasSuccessful)
 void UMenu::HostButtonClicked()
 {
 	//禁用按钮
-	//HostButton->SetIsEnabled(false);
+	HostButton->SetIsEnabled(false);
 
 	if (MultiplayerSessionsSubsystem) {
 		MultiplayerSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);	// 创建游戏会话
@@ -192,7 +192,7 @@ void UMenu::JoinButtonClicked()
 {
 
 	//禁用按钮
-	//JoinButton->SetIsEnabled(false);
+	JoinButton->SetIsEnabled(false);
 	if (MultiplayerSessionsSubsystem)
 	{
 		MultiplayerSessionsSubsystem->FindSessions(10000);
