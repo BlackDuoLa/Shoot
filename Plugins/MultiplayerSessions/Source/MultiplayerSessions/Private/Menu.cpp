@@ -11,7 +11,7 @@ void UMenu::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch , FSt
 
 	NumPublicConnections = NumberOfPublicConnections;
 	MatchType = TypeOfMatch;
-	/* P19（实现子系统函数）创建会话（Create Session）*/
+
 
 
 	AddToViewport();							// 添加到视口
@@ -39,19 +39,10 @@ void UMenu::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch , FSt
 	}
 
 
-	/* P18 访问我们的子系统（Acessing Our Subsystem）*/
 	UGameInstance* GameInstance = GetGameInstance();	// 获取游戏实例
 	if (GameInstance) 
 	{
 		MultiplayerSessionsSubsystem = GameInstance->GetSubsystem<UMultiplayerSessionsSubsystem>();	// 访问子系统
-	}
-	/* P18 访问我们的子系统（Acessing Our Subsystem）*/
-
-
-	// 绑定菜单类回调函数到子系统委托上
-	if (MultiplayerSessionsSubsystem) 
-	{
-		MultiplayerSessionsSubsystem->SubsystemOnCreateSessionCompleteDelegate.AddDynamic(this, &ThisClass::OnCreateSession);
 	}
 
 

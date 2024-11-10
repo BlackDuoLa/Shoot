@@ -91,32 +91,37 @@ void UMultiplayerSessionsSubsystem::CreateSession(int32 NumpublicConnections, FS
 }
 
 void UMultiplayerSessionsSubsystem::FindSessions(int32 MaxSearchResults)
-{
+{	
+
+	// 检查会话接口是否有效
 	if (!SessionInterface.IsValid())
 	{
+		return;
+	}
+		// 保存委托句柄，以便此后移出委托列表
 		FindSessionsCompleteDelegateHandle = SessionInterface->AddOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegate);
 
-
+		// 利用函数 MakeShareable 初始化会话查找智能指针。
 		LastSessionSearch = MakeShareable(new FOnlineSessionSearch());
-		LastSessionSearch->MaxSearchResults = MaxSearchResults;
+
+		LastSessionSearch->MaxSearchResults = MaxSearchResults;  //??????
 		LastSessionSearch->bIsLanQuery = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
 		LastSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);	
 		// 会话搜索设置：查询设置，确保任何查找到的会话都使用了 Presence
 	
-
 		//获取本地玩家指针
 		const ULocalPlayer* LocalPlayer = GetWorld()->GetFirstLocalPlayerFromController();
-		if (!SessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), LastSessionSearch.ToSharedRef())) {
+
+	if (!SessionInterface->FindSessions(*LocalPlayer->GetPreferredUniqueNetId(), LastSessionSearch.ToSharedRef())) 
+	{
 			// 如果搜索会话失败，将委托移出委托列表
 			SessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegateHandle);
 
 			// 广播搜索会话结果空数组和失败消息到自定义的子系统委托
 			SubsystemOnFindSessionsCompleteDelegate.Broadcast(TArray<FOnlineSessionSearchResult>(), false);
-		}
 	}
-	
-
 }
+	
 
 void UMultiplayerSessionsSubsystem::JoinSession(const FOnlineSessionSearchResult& SessionResult)
 {
@@ -187,18 +192,19 @@ void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, b
 
 void UMultiplayerSessionsSubsystem::OnFindSessionsComplete(bool bWasSuccessful)
 {
-
+	// 如果搜索会话成功，将委托移出委托列表
 	if (SessionInterface)
 	{
 		SessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(FindSessionsCompleteDelegateHandle);
 	}
+	// 如果搜索结果为空，广播搜索会话结果的空数组和失败消息到自定义的子系统委托
 	if (LastSessionSearch->SearchResults.Num() <= 0)
 	{
 		SubsystemOnFindSessionsCompleteDelegate.Broadcast(TArray<FOnlineSessionSearchResult>(),false);
-
 		return;
-
 	}
+
+	// 广播搜索会话结果的非空数组和成功消息到自定义的子系统委托
 	SubsystemOnFindSessionsCompleteDelegate.Broadcast(LastSessionSearch->SearchResults, bWasSuccessful);
 
 }

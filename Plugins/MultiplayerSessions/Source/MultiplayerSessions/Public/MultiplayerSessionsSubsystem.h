@@ -87,12 +87,13 @@ protected:
 
 private:
 
-
+	// 会话接口智能指针
 	IOnlineSessionPtr SessionInterface;
-	/* P19（实现子系统函数）创建会话（Create Session）*/
-	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;	// 上次创建的会话的设置
-	/* P19（实现子系统函数）创建会话（Create Session）*/
 
+	// 上次创建的会话的设置
+	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
+
+	// 上次搜索的会话的设置
 	TSharedPtr< FOnlineSessionSearch>LastSessionSearch;
 
 	
